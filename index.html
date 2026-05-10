@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepAI — Smart Interview Coach | Land Your Dream Job</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* ═══════════════════════════ ROOT ═══════════════════════════ */
+        :root {
+            --primary: #1a6b45;
+            --primary-light: #2d9b62;
+            --primary-pale: #e8f5ed;
+            --gold: #c9963a;
+            --gold-light: #f0c96a;
+            --dark: #0d1117;
+            --body: #374151;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+            --surface: #ffffff;
+            --background: #f8fafc;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --success: #10b981;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.05);
+            --shadow-md: 0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-lg: 0 4px 6px rgba(0,0,0,0.04), 0 20px 50px rgba(0,0,0,0.1);
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--body);
+            background: var(--background);
+            background-image: radial-gradient(circle, #d1d5db 1px, transparent 1px);
+            background-size: 24px 24px;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; color: var(--dark); line-height: 1.25; }
+        button { font-family: 'DM Sans', sans-serif; cursor: pointer; border: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        input, textarea, select { font-family: 'DM Sans', sans-serif; color: var(--dark); }
+
+        /* ═══════════════════════════ UTILITIES ═══════════════════════════ */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+        .section { padding: 72px 0; }
+        .section-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--primary); margin-bottom: 12px; }
+        .section-title { font-size: clamp(1.8rem, 3vw, 2.4rem); margin-bottom: 12px; }
+        .section-subtitle { color: var(--muted); font-size: 1.05rem; margin-bottom: 40px; max-width: 560px; }
+
+        /* ═══════════════════════════ SCREENS ═══════════════════════════ */
+        .screen { display: none; }
+        .screen.active { display: block; animation: fadeUp 0.5s ease both; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ═══════════════════════════ HEADER ═══════════════════════════ */
+        header {
+            position: sticky; top: 0; z-index: 1000; height: 68px;
+            background: rgba(255,255,255,0.94); backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0,0,0,0.07);
+            display: flex; align-items: center; padding: 0 32px;
+        }
+        .navbar { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1400px; margin: 0 auto; }
+        .logo { display: flex; align-items: center; gap: 10px; cursor: pointer; text-decoration: none; transition: opacity 0.2s; }
+        .logo:hover { opacity: 0.85; }
+        .logo-badge { display: flex; align-items: center; gap: 6px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; padding: 8px 16px; border-radius: 100px; font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
+        .logo-badge .ai-text { color: var(--gold-light); }
+
+        .header-nav { display: flex; gap: 28px; align-items: center; }
+        .header-nav a { text-decoration: none; color: var(--body); font-weight: 500; font-size: 14px; transition: color 0.2s; cursor: pointer; padding: 8px 0; border-bottom: 2px solid transparent; user-select: none; }
+        .header-nav a:hover { color: var(--primary); border-bottom-color: var(--primary); }
+
+        .header-right { display: flex; align-items: center; gap: 12px; }
+        .start-header-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white; padding: 10px 20px; border-radius: 100px;
+            font-size: 14px; font-weight: 600; border: none;
+            box-shadow: 0 4px 12px rgba(26,107,69,0.3);
+            cursor: pointer; transition: all 0.3s ease; user-select: none;
+        }
+        .start-header-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(26,107,69,0.35); }
+        .start-header-btn:active { transform: scale(0.98); }
+
+        /* ═══════════════════════════ HERO ═══════════════════════════ */
+        .hero-banner {
+            background: linear-gradient(135deg, #0a2516 0%, #1a6b45 55%, #1e7a4f 100%);
+            color: white; padding: 90px 32px 80px; text-align: center;
+            position: relative; overflow: hidden;
+        }
+        /* Decorative grid overlay */
+        .hero-banner::before {
+            content: ''; position: absolute; inset: 0;
+            background-image: linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+            background-size: 48px 48px; pointer-events: none;
+        }
+        /* Glowing orbs */
+        .hero-banner::after {
+            content: ''; position: absolute; top: -80px; right: -80px;
+            width: 400px; height: 400px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(201,150,58,0.18) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero-orb-left {
+            position: absolute; bottom: -60px; left: -60px;
+            width: 320px; height: 320px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(45,155,98,0.2) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero-inner { position: relative; z-index: 2; }
+
+        /* FIX: Trust badge with avatars */
+        .hero-trust-row { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 28px; }
+        .hero-avatars { display: flex; }
+        .hero-avatar { width: 32px; height: 32px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.6); background: linear-gradient(135deg, var(--gold), var(--gold-light)); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #1c1c1c; margin-left: -8px; }
+        .hero-avatar:first-child { margin-left: 0; }
+        .hero-trust-text { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.85); }
+        .hero-stars { color: var(--gold-light); font-size: 12px; }
+
+        /* FIX: White hero text */
+        .hero-badge { display: inline-block; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); padding: 7px 18px; border-radius: 100px; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.9); margin-bottom: 22px; backdrop-filter: blur(8px); letter-spacing: 0.04em; }
+        .hero-title { font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 700; color: #ffffff; line-height: 1.15; margin: 0 auto 20px; max-width: 820px; }
+        .hero-title em { color: var(--gold-light); font-style: italic; }
+        .hero-subtitle { font-size: 1.15rem; color: rgba(255,255,255,0.78); margin: 0 auto 40px; max-width: 580px; line-height: 1.7; }
+
+        /* FIX: Two CTA buttons */
+        .hero-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 64px; }
+        .btn { padding: 14px 32px; border-radius: 100px; font-weight: 600; font-size: 15px; letter-spacing: 0.02em; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-gold { background: linear-gradient(135deg, var(--gold), #e8aa44); color: #1c1c1c; box-shadow: 0 4px 18px rgba(201,150,58,0.4); }
+        .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,150,58,0.45); }
+        .btn-ghost { background: rgba(255,255,255,0.1); color: white; border: 1.5px solid rgba(255,255,255,0.35); backdrop-filter: blur(8px); }
+        .btn-ghost:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.6); }
+
+        /* FIX: Stats with real values */
+        .hero-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; max-width: 780px; margin: 0 auto; }
+        .stat-box { background: rgba(255,255,255,0.09); border: 1px solid rgba(255,255,255,0.15); padding: 22px 16px; border-radius: 16px; backdrop-filter: blur(10px); transition: background 0.2s; }
+        .stat-box:hover { background: rgba(255,255,255,0.13); }
+        .stat-number { font-family: 'JetBrains Mono', monospace; font-size: 1.9rem; font-weight: 700; color: var(--gold-light); display: block; }
+        .stat-label { font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 4px; font-weight: 500; }
+
+        /* Scroll indicator */
+        .scroll-down { margin-top: 48px; display: flex; flex-direction: column; align-items: center; gap: 8px; color: rgba(255,255,255,0.45); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+        .scroll-arrow { width: 28px; height: 28px; border: 1.5px solid rgba(255,255,255,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; animation: bounceDown 1.8s ease-in-out infinite; }
+        @keyframes bounceDown { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+
+        /* ═══════════════════════════ HOW IT WORKS ═══════════════════════════ */
+        .how-it-works { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+        .how-card { text-align: center; padding: 8px; }
+        .how-icon-wrap { width: 64px; height: 64px; border-radius: 18px; background: var(--primary-pale); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 18px; }
+        .how-title { font-size: 1.15rem; margin-bottom: 10px; }
+        .how-text { color: var(--muted); font-size: 14px; line-height: 1.7; }
+        .how-step { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: var(--primary); background: var(--primary-pale); padding: 3px 10px; border-radius: 100px; margin-bottom: 14px; letter-spacing: 0.05em; }
+
+        /* ═══════════════════════════ SETUP CARD ═══════════════════════════ */
+        .setup-section-header { text-align: center; margin-bottom: 40px; }
+        .setup-section-header .section-subtitle { margin: 0 auto; }
+
+        .setup-card { background: var(--surface); border: 1px solid rgba(0,0,0,0.07); border-radius: var(--radius-lg); padding: 44px; box-shadow: var(--shadow-lg); }
+        .form-section { margin-bottom: 36px; }
+        .form-section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--muted); letter-spacing: 0.07em; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; font-family: 'DM Sans', sans-serif; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .form-group { display: flex; flex-direction: column; gap: 7px; }
+        .form-label { font-weight: 600; font-size: 13.5px; color: var(--dark); }
+        .form-optional { font-size: 11px; color: var(--muted); font-weight: 400; }
+
+        .form-input, .form-select {
+            height: 52px; border: 1.5px solid var(--border); border-radius: var(--radius-md);
+            padding: 0 18px; font-size: 15px; background: white; transition: all 0.2s;
+            color: var(--dark);
+        }
+        .form-input:focus, .form-select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(26,107,69,0.1); }
+        .form-input::placeholder { color: #b0b8c4; }
+        .form-select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath fill='none' stroke='%236b7280' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M1 1l5 5 5-5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; padding-right: 42px; }
+
+        /* API Key field */
+        .api-key-wrapper { position: relative; }
+        .api-key-wrapper .form-input { padding-right: 80px; }
+        .api-key-actions { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); display: flex; gap: 4px; }
+        .api-icon-btn { width: 32px; height: 32px; border: none; background: none; color: var(--muted); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; transition: all 0.2s; }
+        .api-icon-btn:hover { background: var(--background); color: var(--primary); }
+        .api-status { display: flex; align-items: center; gap: 7px; font-size: 12.5px; margin-top: 6px; color: var(--muted); }
+        .api-status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); flex-shrink: 0; }
+        .api-status.valid { color: var(--success); }
+        .api-status.valid .api-status-dot { background: var(--success); }
+        .api-status.error { color: var(--danger); }
+        .api-status.error .api-status-dot { background: var(--danger); }
+
+        /* Pill group */
+        .pill-group { display: flex; gap: 10px; flex-wrap: wrap; }
+        .pill { padding: 10px 26px; border: 1.5px solid var(--border); background: transparent; border-radius: 100px; font-weight: 600; font-size: 14px; color: var(--body); transition: all 0.2s; }
+        .pill:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-pale); }
+        .pill.active { background: linear-gradient(135deg, var(--gold), #e8aa44); color: #1c1c1c; border-color: transparent; box-shadow: 0 4px 12px rgba(201,150,58,0.3); }
+
+        .submit-btn { width: 100%; height: 54px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; border-radius: 100px; font-weight: 700; font-size: 16px; letter-spacing: 0.02em; box-shadow: 0 4px 18px rgba(26,107,69,0.35); margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,107,69,0.4); }
+        .submit-btn:active { transform: scale(0.99); }
+        .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; box-shadow: none; }
+
+        /* ═══════════════════════════ FEATURES ═══════════════════════════ */
+        .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .feature-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 32px; transition: all 0.3s ease; }
+        .feature-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--primary); }
+        .feature-icon { font-size: 2.2rem; margin-bottom: 18px; display: block; }
+        .feature-title { font-size: 1.1rem; margin-bottom: 10px; }
+        .feature-text { color: var(--muted); font-size: 14px; line-height: 1.7; }
+
+        /* Social proof */
+        .social-proof { text-align: center; padding: 36px; background: var(--surface); border-radius: 16px; border: 1px solid var(--border); }
+        .proof-avatars { display: flex; justify-content: center; margin-bottom: 14px; }
+        .proof-avatar { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--primary-light)); border: 3px solid white; margin-left: -10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 13px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+        .proof-avatar:first-child { margin-left: 0; }
+        .proof-text { font-weight: 600; color: var(--dark); margin-bottom: 8px; font-size: 1rem; }
+        .rating { font-size: 13px; color: var(--muted); }
+        .rating-stars { color: var(--gold); margin-right: 4px; }
+
+        /* Trust badges */
+        .trust-badges { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; padding: 28px 32px; background: var(--primary-pale); border-radius: 16px; border: 1px solid rgba(26,107,69,0.12); }
+        .badge { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--primary); padding: 6px 14px; background: white; border-radius: 100px; border: 1px solid rgba(26,107,69,0.15); }
+
+        /* Testimonials */
+        .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .testimonial-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px; transition: all 0.25s; }
+        .testimonial-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+        .testimonial-stars { color: var(--gold); font-size: 13px; margin-bottom: 14px; }
+        .testimonial-quote { color: var(--body); font-size: 14.5px; line-height: 1.75; margin-bottom: 20px; font-style: italic; }
+        .testimonial-author { display: flex; align-items: center; gap: 12px; }
+        .testimonial-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--gold-light)); display: flex; align-items: center; justify-content: center; color: #1c1c1c; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+        .testimonial-info h4 { font-size: 14px; color: var(--dark); margin-bottom: 2px; font-family: 'DM Sans', sans-serif; font-weight: 600; }
+        .testimonial-info p { font-size: 12px; color: var(--muted); }
+
+        /* ═══════════════════════════ INTERVIEW SCREEN ═══════════════════════════ */
+        .screen-interview { padding: 0; }
+        .interview-header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 20px 32px; position: sticky; top: 68px; z-index: 100; }
+        .interview-top-bar { display: flex; align-items: center; gap: 24px; margin-bottom: 16px; flex-wrap: wrap; }
+        .interview-info { flex: 1; min-width: 200px; }
+        .interview-role-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--primary-pale); color: var(--primary); padding: 5px 12px; border-radius: 100px; font-size: 12px; font-weight: 600; margin-bottom: 10px; }
+        .progress-bar { height: 6px; background: var(--border); border-radius: 100px; overflow: hidden; margin-bottom: 6px; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-light)); border-radius: 100px; transition: width 0.4s ease; }
+        .progress-text { font-size: 12px; color: var(--muted); font-weight: 600; }
+        .timer-wrap { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+        .timer { font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; font-weight: 600; color: var(--primary); }
+        .timer.warning { color: var(--warning); animation: pulse 1s ease-in-out infinite; }
+        .timer.danger { color: var(--danger); animation: pulse 0.5s ease-in-out infinite; }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.55; } }
+        .timer-label { font-size: 11px; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; }
+        .question-dots { display: flex; gap: 8px; flex-wrap: wrap; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--border); cursor: pointer; transition: all 0.25s; }
+        .dot.completed { background: var(--primary); }
+        .dot.current { background: var(--gold); box-shadow: 0 0 0 3px rgba(201,150,58,0.28); transform: scale(1.35); }
+        .dot:hover:not(.current) { transform: scale(1.2); }
+
+        .interview-body { max-width: 860px; margin: 0 auto; padding: 36px 32px 60px; }
+        .question-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 40px; margin-bottom: 24px; box-shadow: var(--shadow-md); animation: fadeUp 0.35s ease both; }
+        .question-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; padding-bottom: 18px; border-bottom: 1px solid var(--border); }
+        .question-number { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; }
+        .question-type-pill { background: var(--primary-pale); color: var(--primary); padding: 5px 13px; border-radius: 100px; font-size: 12px; font-weight: 600; }
+        .question-text { font-size: 1.35rem; line-height: 1.65; color: var(--dark); margin-bottom: 20px; font-family: 'Playfair Display', serif; }
+        .question-tip { background: rgba(201,150,58,0.07); border-left: 3px solid var(--gold); padding: 14px 18px; border-radius: 8px; font-size: 13.5px; color: var(--body); }
+        .question-tip strong { color: var(--gold); }
+
+        .answer-box { background: var(--surface); border: 1.5px solid var(--border); border-radius: 16px; padding: 22px; transition: all 0.2s; }
+        .answer-box:focus-within { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(26,107,69,0.08); }
+        .answer-label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .answer-label label { font-weight: 600; color: var(--dark); font-size: 14px; }
+        .word-count { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--muted); }
+        .word-count.good { color: var(--success); }
+        .answer-textarea { width: 100%; height: 190px; border: none; border-radius: 8px; padding: 14px; font-size: 15px; resize: vertical; background: var(--background); color: var(--dark); line-height: 1.65; }
+        .answer-textarea:focus { outline: none; }
+        .answer-hint { font-size: 12px; color: var(--muted); margin-top: 10px; display: flex; align-items: center; gap: 6px; }
+        .answer-hint.ready { color: var(--success); }
+
+        .interview-buttons { display: flex; gap: 14px; justify-content: space-between; margin-top: 28px; }
+        .btn-skip { background: transparent; color: var(--muted); border: 1.5px solid var(--border); padding: 13px 26px; border-radius: 100px; font-weight: 600; font-size: 14px; }
+        .btn-skip:hover { color: var(--body); border-color: var(--body); }
+        .btn-next { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; padding: 13px 32px; border-radius: 100px; font-weight: 700; font-size: 15px; box-shadow: 0 4px 15px rgba(26,107,69,0.32); display: flex; align-items: center; gap: 8px; }
+        .btn-next:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(26,107,69,0.38); }
+
+        /* ═══════════════════════════ RESULTS ═══════════════════════════ */
+        .results-body { max-width: 900px; margin: 0 auto; padding: 50px 32px 80px; }
+
+        .result-header { text-align: center; margin-bottom: 44px; }
+        .result-congrats { font-size: clamp(1.8rem, 3vw, 2.4rem); margin-bottom: 20px; }
+        .result-meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+        .result-meta-item { background: var(--primary-pale); border-radius: 10px; padding: 14px; text-align: center; }
+        .result-meta-item .meta-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--primary); margin-bottom: 4px; }
+        .result-meta-item .meta-value { font-size: 14px; font-weight: 600; color: var(--dark); }
+
+        .score-section { display: flex; justify-content: center; margin: 44px 0; }
+        .score-circle-container { position: relative; width: 220px; height: 220px; }
+        .score-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+        /* FIX: Correct circumference = 2 * π * r = 2 * 3.14159 * 88 ≈ 553 */
+        .score-circle-bg { fill: none; stroke: var(--border); stroke-width: 10; }
+        .score-circle-fill { fill: none; stroke-width: 10; stroke-linecap: round; stroke-dasharray: 553; stroke-dashoffset: 553; transition: stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1), stroke 0.4s; }
+        .score-circle-fill.success { stroke: var(--success); }
+        .score-circle-fill.warning { stroke: var(--warning); }
+        .score-circle-fill.danger { stroke: var(--danger); }
+        .score-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+        .score-number { font-family: 'Playfair Display', serif; font-size: 3.4rem; font-weight: 700; color: var(--dark); line-height: 1; }
+        .score-max { font-size: 1rem; color: var(--muted); }
+        .score-label { text-align: center; margin-top: 14px; font-weight: 600; color: var(--primary); font-size: 15px; }
+
+        .result-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 40px; }
+        .result-stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px; text-align: center; }
+        .result-stat-number { font-family: 'JetBrains Mono', monospace; font-size: 1.9rem; font-weight: 700; color: var(--primary); }
+        .result-stat-label { font-size: 12.5px; color: var(--muted); margin-top: 5px; font-weight: 600; }
+
+        .feedback-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 36px; margin-bottom: 32px; }
+        .feedback-title { font-size: 1.3rem; margin-bottom: 14px; }
+        .feedback-text { color: var(--body); line-height: 1.8; margin-bottom: 26px; font-size: 15px; }
+        .feedback-highlights { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .highlight-box { background: var(--background); border-left: 3px solid var(--success); padding: 18px; border-radius: 8px; }
+        .highlight-box.warning { border-left-color: var(--warning); }
+        .highlight-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--muted); letter-spacing: 0.07em; margin-bottom: 8px; font-family: 'DM Sans', sans-serif; }
+        .highlight-text { font-size: 13.5px; color: var(--body); line-height: 1.65; }
+
+        /* Breakdown */
+        .breakdown-section { margin-bottom: 36px; }
+        .breakdown-title { font-size: 1.3rem; margin-bottom: 20px; }
+        .breakdown-item { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 14px; }
+        .breakdown-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 22px; cursor: pointer; user-select: none; transition: background 0.15s; }
+        .breakdown-header:hover { background: var(--background); }
+        .breakdown-left { display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0; }
+        .breakdown-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--primary); flex-shrink: 0; }
+        .breakdown-question { flex: 1; min-width: 0; }
+        .breakdown-question-text { font-weight: 600; color: var(--dark); margin-bottom: 5px; font-size: 14.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .breakdown-score-badge { display: inline-block; padding: 3px 11px; border-radius: 100px; font-size: 12px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+        .breakdown-chevron { color: var(--muted); transition: transform 0.3s; font-size: 12px; flex-shrink: 0; }
+        .breakdown-item.expanded .breakdown-chevron { transform: rotate(180deg); }
+        .breakdown-content { display: none; padding: 0 22px 22px; border-top: 1px solid var(--border); }
+        .breakdown-item.expanded .breakdown-content { display: block; animation: fadeUp 0.2s ease; }
+        .breakdown-answer { margin-top: 18px; }
+        .breakdown-answer-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--muted); letter-spacing: 0.07em; margin-bottom: 8px; }
+        .breakdown-answer-text { background: var(--background); padding: 14px; border-radius: 8px; font-size: 14px; color: var(--body); line-height: 1.65; }
+        .breakdown-feedback { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px; }
+        .feedback-item { display: flex; gap: 10px; font-size: 14px; }
+        .feedback-item-icon { flex-shrink: 0; font-size: 15px; }
+        .feedback-item-text { color: var(--body); line-height: 1.65; }
+        .perfect-answer-section { margin-top: 20px; padding: 20px; background: linear-gradient(135deg, rgba(201,150,58,0.07), rgba(26,107,69,0.07)); border-left: 3px solid var(--gold); border-radius: 10px; }
+        .perfect-answer-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--gold); letter-spacing: 0.07em; margin-bottom: 10px; display: flex; align-items: center; gap: 7px; }
+        .perfect-answer-text { color: var(--body); font-size: 14px; line-height: 1.8; }
+
+        .result-buttons { display: flex; gap: 16px; justify-content: center; margin-top: 44px; }
+        .btn-download { background: var(--surface); border: 1.5px solid var(--primary); color: var(--primary); padding: 14px 32px; border-radius: 100px; font-weight: 600; font-size: 15px; transition: all 0.2s; }
+        .btn-download:hover { background: var(--primary-pale); }
+        .btn-again { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; padding: 14px 32px; border-radius: 100px; font-weight: 700; font-size: 15px; box-shadow: 0 4px 15px rgba(26,107,69,0.32); }
+        .btn-again:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(26,107,69,0.38); }
+
+        /* ═══════════════════════════ LOADING ═══════════════════════════ */
+        .loading-overlay { display: none; position: fixed; inset: 0; background: rgba(13,17,23,0.55); backdrop-filter: blur(6px); z-index: 2000; align-items: center; justify-content: center; }
+        .loading-overlay.active { display: flex; animation: fadeUp 0.3s ease; }
+        .loading-card { background: var(--surface); border-radius: 24px; padding: 52px 44px; text-align: center; box-shadow: 0 30px 60px rgba(0,0,0,0.2); max-width: 420px; width: 90%; }
+        .loading-spinner { width: 72px; height: 72px; border: 5px solid var(--border); border-top-color: var(--primary); border-radius: 50%; margin: 0 auto 24px; animation: spin 0.9s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-title { font-size: 1.35rem; margin-bottom: 10px; }
+        .loading-text { color: var(--muted); font-size: 14px; margin-bottom: 22px; line-height: 1.6; }
+        .rotating-quote { background: var(--primary-pale); border-radius: 10px; padding: 16px 20px; font-size: 13px; color: var(--primary); font-style: italic; min-height: 52px; display: flex; align-items: center; justify-content: center; line-height: 1.5; transition: opacity 0.5s; }
+
+        /* ═══════════════════════════ ERRORS ═══════════════════════════ */
+        .error-message { background: rgba(239,68,68,0.07); border: 1.5px solid rgba(239,68,68,0.4); border-radius: 12px; padding: 14px 18px; color: var(--danger); font-size: 14px; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+        .error-close { cursor: pointer; opacity: 0.6; font-size: 17px; transition: opacity 0.2s; flex-shrink: 0; }
+        .error-close:hover { opacity: 1; }
+
+        /* ═══════════════════════════ CONFETTI ═══════════════════════════ */
+        #confettiCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1999; display: none; }
+        #confettiCanvas.active { display: block; }
+
+        /* ═══════════════════════════ API KEY MODAL ═══════════════════════════ */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); backdrop-filter: blur(4px); z-index: 3000; align-items: center; justify-content: center; }
+        .modal-overlay.active { display: flex; }
+        .modal-card { background: var(--surface); border-radius: 20px; padding: 40px; max-width: 500px; width: 90%; box-shadow: var(--shadow-lg); }
+        .modal-title { font-size: 1.4rem; margin-bottom: 10px; }
+        .modal-text { color: var(--muted); font-size: 14px; margin-bottom: 24px; line-height: 1.6; }
+        .modal-link { color: var(--primary); font-weight: 600; }
+        .modal-btns { display: flex; gap: 12px; margin-top: 20px; }
+        .modal-cancel { background: var(--background); border: 1.5px solid var(--border); color: var(--body); padding: 11px 22px; border-radius: 100px; font-weight: 600; font-size: 14px; }
+        .modal-save { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; padding: 11px 26px; border-radius: 100px; font-weight: 700; font-size: 14px; box-shadow: 0 4px 12px rgba(26,107,69,0.3); }
+
+        /* ═══════════════════════════ FOOTER ═══════════════════════════ */
+        .footer { background: var(--dark); color: rgba(255,255,255,0.5); padding: 28px 32px; text-align: center; font-size: 13px; }
+        .footer strong { color: rgba(255,255,255,0.8); }
+        .footer a { color: var(--gold-light); text-decoration: none; }
+
+        /* ═══════════════════════════ RESPONSIVE ═══════════════════════════ */
+        @media (max-width: 900px) {
+            .hero-stats { grid-template-columns: repeat(2, 1fr); }
+            .how-it-works { grid-template-columns: 1fr; gap: 24px; }
+            .features-grid { grid-template-columns: 1fr; }
+            .testimonials-grid { grid-template-columns: 1fr; }
+            .feedback-highlights { grid-template-columns: 1fr; }
+            .result-meta { grid-template-columns: repeat(2, 1fr); }
+            .result-stats { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            header { padding: 0 16px; }
+            .header-nav { display: none; }
+            .hero-banner { padding: 60px 16px 56px; }
+            .hero-buttons { flex-direction: column; align-items: center; }
+            .section { padding: 52px 0; }
+            .setup-card { padding: 28px 20px; }
+            .form-grid { grid-template-columns: 1fr; }
+            .interview-header { padding: 16px; }
+            .interview-body { padding: 24px 16px 50px; }
+            .question-card { padding: 26px 20px; }
+            .question-text { font-size: 1.15rem; }
+            .interview-buttons { flex-direction: column; }
+            .results-body { padding: 36px 16px 60px; }
+            .result-buttons { flex-direction: column; align-items: center; }
+            .container { padding: 0 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ════════════════ HEADER ════════════════ -->
+<header>
+    <div class="navbar">
+        <a class="logo" onclick="resetAndGoHome()">
+            <div class="logo-badge">Prep<span class="ai-text">AI</span></div>
+        </a>
+        <nav class="header-nav">
+            <a onclick="scrollToSection('how-section')">How It Works</a>
+            <a onclick="scrollToSection('features-section')">Features</a>
+            <a onclick="scrollToSection('testimonials-section')">Reviews</a>
+        </nav>
+        <div class="header-right">
+            <button class="start-header-btn" onclick="scrollToSection('setup-section')">Start Free ↗</button>
+        </div>
+    </div>
+</header>
+
+<!-- ════════════════ SCREEN 1: LANDING ════════════════ -->
+<div class="screen screen-landing active">
+
+    <!-- HERO -->
+    <section class="hero-banner">
+        <div class="hero-orb-left"></div>
+        <div class="hero-inner">
+            <!-- Trust row with avatars -->
+            <div class="hero-trust-row">
+                <div class="hero-avatars">
+                    <div class="hero-avatar">RV</div>
+                    <div class="hero-avatar">PK</div>
+                    <div class="hero-avatar">AM</div>
+                    <div class="hero-avatar">NK</div>
+                    <div class="hero-avatar">+</div>
+                </div>
+                <span class="hero-trust-text">Trusted by 10,000+ job seekers</span>
+                <span class="hero-stars">★★★★★ 4.9</span>
+            </div>
+
+            <div class="hero-badge">✦ AI-Powered Interview Coaching — 100% Free</div>
+            <h1 class="hero-title">Land Your Dream Job with <em>AI-Powered</em> Practice</h1>
+            <p class="hero-subtitle">Get intelligent, personalized feedback on your interview answers in under 60 seconds — powered by advanced AI.</p>
+
+            <div class="hero-buttons">
+                <button class="btn btn-gold" onclick="scrollToSection('setup-section')">▶ Start Free Practice</button>
+                <button class="btn btn-ghost" onclick="scrollToSection('how-section')">How It Works ↓</button>
+            </div>
+
+            <div class="hero-stats">
+                <div class="stat-box">
+                    <span class="stat-number">95%</span>
+                    <div class="stat-label">Success Rate</div>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">50+</span>
+                    <div class="stat-label">Job Roles</div>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">&lt;60s</span>
+                    <div class="stat-label">AI Feedback</div>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">100%</span>
+                    <div class="stat-label">Free Forever</div>
+                </div>
+            </div>
+
+            <div class="scroll-down">
+                <div class="scroll-arrow">↓</div>
+                <span>Scroll to explore</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="section" id="how-section">
+        <div class="container">
+            <div style="text-align:center; margin-bottom:44px;">
+                <div class="section-label">Simple & Fast</div>
+                <h2 class="section-title">How PrepAI Works</h2>
+                <p class="section-subtitle" style="margin:0 auto;">Three simple steps to get professional-level interview feedback in minutes.</p>
+            </div>
+            <div class="how-it-works">
+                <div class="how-card">
+                    <div class="how-step">Step 01</div>
+                    <div class="how-icon-wrap">⚙️</div>
+                    <h3 class="how-title">Configure Your Session</h3>
+                    <p class="how-text">Tell us your name, target role, and experience level. We tailor everything specifically to your profile.</p>
+                </div>
+                <div class="how-card">
+                    <div class="how-step">Step 02</div>
+                    <div class="how-icon-wrap">💬</div>
+                    <h3 class="how-title">Answer AI Questions</h3>
+                    <p class="how-text">Practice with realistic, role-specific interview questions generated just for you. No generic templates.</p>
+                </div>
+                <div class="how-card">
+                    <div class="how-step">Step 03</div>
+                    <div class="how-icon-wrap">📊</div>
+                    <h3 class="how-title">Get Detailed Feedback</h3>
+                    <p class="how-text">Receive a scored breakdown of every answer with strengths, improvements, and model answers to learn from.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SETUP CARD -->
+    <section class="section" id="setup-section" style="background: linear-gradient(180deg, var(--background) 0%, #edf2f7 100%);">
+        <div class="container">
+            <div class="setup-section-header">
+                <div class="section-label">Get Started</div>
+                <h2 class="section-title">Configure Your Interview Session</h2>
+                <p class="section-subtitle">Fill in your details and preferences — we'll handle the rest.</p>
+            </div>
+
+            <div class="setup-card">
+                <div id="error-container"></div>
+
+                <!-- About You -->
+                <div class="form-section">
+                    <div class="form-section-title">👤 About You</div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" id="fullName" class="form-input" placeholder="e.g. Rahul Sharma" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" id="email" class="form-input" placeholder="your@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone Number <span class="form-optional">(optional)</span></label>
+                            <input type="tel" id="phone" class="form-input" placeholder="+91 XXXXX XXXXX">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">College / Company <span class="form-optional">(optional)</span></label>
+                            <input type="text" id="college" class="form-input" placeholder="e.g. JNTU Kakinada">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">City <span class="form-optional">(optional)</span></label>
+                            <input type="text" id="city" class="form-input" placeholder="e.g. Vijayawada">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interview Preferences -->
+                <div class="form-section">
+                    <div class="form-section-title">⚙️ Interview Preferences</div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Job Role</label>
+                            <select id="jobRole" class="form-select" required>
+                                <option value="">Select a role...</option>
+                                <option value="Software Developer">Software Developer</option>
+                                <option value="Frontend Engineer">Frontend Engineer</option>
+                                <option value="Backend Engineer">Backend Engineer</option>
+                                <option value="Data Scientist">Data Scientist</option>
+                                <option value="Data Analyst">Data Analyst</option>
+                                <option value="Product Manager">Product Manager</option>
+                                <option value="UX/UI Designer">UX/UI Designer</option>
+                                <option value="DevOps Engineer">DevOps Engineer</option>
+                                <option value="Business Analyst">Business Analyst</option>
+                                <option value="Marketing Manager">Marketing Manager</option>
+                                <option value="Sales Executive">Sales Executive</option>
+                                <option value="HR Executive">HR Executive</option>
+                                <option value="NGO Program Manager">NGO Program Manager</option>
+                                <option value="Content Writer">Content Writer</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Experience Level</label>
+                            <select id="experienceLevel" class="form-select" required>
+                                <option value="">Select level...</option>
+                                <option value="Fresher">Fresher (0–0.5 yrs)</option>
+                                <option value="Junior">Junior (0.5–2 yrs)</option>
+                                <option value="Mid-level">Mid-level (2–5 yrs)</option>
+                                <option value="Senior">Senior (5+ yrs)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Interview Type</label>
+                            <select id="interviewType" class="form-select" required>
+                                <option value="">Select type...</option>
+                                <option value="HR Round">HR Round</option>
+                                <option value="Technical">Technical</option>
+                                <option value="Behavioral">Behavioral (STAR)</option>
+                                <option value="Mixed">Mixed</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Number of Questions -->
+                <div class="form-section">
+                    <div class="form-section-title">❓ Number of Questions</div>
+                    <div class="pill-group">
+                        <button class="pill active" onclick="selectPill(this, 5)">5 Questions</button>
+                        <button class="pill" onclick="selectPill(this, 10)">10 Questions</button>
+                        <button class="pill" onclick="selectPill(this, 15)">15 Questions</button>
+                    </div>
+                </div>
+
+
+
+                <button class="submit-btn" id="startBtn" onclick="startInterview()">
+                    <span>▶</span> Start My Interview Session
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="section" id="features-section">
+        <div class="container">
+            <div class="section-label">Why PrepAI</div>
+            <h2 class="section-title">Built for Real Results</h2>
+            <p class="section-subtitle">Not just another quiz tool — a full AI coaching experience.</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">🎯</span>
+                    <h3 class="feature-title">Role-Specific Questions</h3>
+                    <p class="feature-text">Questions tailored to your exact job, industry, and experience. Every session is unique and relevant to you.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🤖</span>
+                    <h3 class="feature-title">AI-Powered Feedback</h3>
+                    <p class="feature-text">Detailed coaching feedback powered by Claude AI — like having a senior interviewer review every answer you give.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📥</span>
+                    <h3 class="feature-title">Downloadable Report</h3>
+                    <p class="feature-text">Get a full PDF-ready report with your scores, feedback, and model answers to study anytime, anywhere.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOCIAL PROOF -->
+    <section class="section">
+        <div class="container">
+            <div class="social-proof">
+                <div class="proof-avatars">
+                    <div class="proof-avatar">RV</div>
+                    <div class="proof-avatar">PK</div>
+                    <div class="proof-avatar">AM</div>
+                    <div class="proof-avatar">NM</div>
+                    <div class="proof-avatar">SK</div>
+                </div>
+                <p class="proof-text">Join 10,000+ job seekers who aced their interviews with PrepAI</p>
+                <div class="rating"><span class="rating-stars">★★★★★</span>4.9 / 5 average rating</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRUST BADGES -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <div class="trust-badges">
+                <div class="badge">🔒 Data never stored</div>
+                <div class="badge">🤖 Powered by Claude AI</div>
+                <div class="badge">⚡ Results in under 60s</div>
+                <div class="badge">💯 100% Free to use</div>
+                <div class="badge">📱 Works on any device</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="section" id="testimonials-section">
+        <div class="container">
+            <div class="section-label">Success Stories</div>
+            <h2 class="section-title">What Our Users Say</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-quote">"I got placed at TCS after 3 sessions on PrepAI! The feedback pinpointed exactly what I was missing. Highly recommend to every fresher."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">PS</div>
+                        <div class="testimonial-info"><h4>Priya Sharma</h4><p>Software Developer, TCS</p></div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-quote">"More detailed than any mock interview I've done with real mentors. The model answers are gold — I literally memorized the structure."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">RM</div>
+                        <div class="testimonial-info"><h4>Rahul Mehta</h4><p>Data Analyst, Infosys</p></div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p class="testimonial-quote">"Perfect for freshers with no interview experience. The questions were exactly what I got in my actual interview. This tool is a must-use."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">AK</div>
+                        <div class="testimonial-info"><h4>Ananya Kumar</h4><p>HR Executive, Deloitte</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <strong>PrepAI</strong> — Smart Interview Coach &nbsp;·&nbsp; Powered by Groq AI &nbsp;·&nbsp;
+        © 2026 PrepAI. All rights reserved.
+    </footer>
+</div>
+
+<!-- ════════════════ SCREEN 2: INTERVIEW ════════════════ -->
+<div class="screen screen-interview">
+    <div class="interview-header">
+        <div class="interview-top-bar">
+            <div class="interview-info">
+                <div class="interview-role-badge" id="interviewRoleBadge">🎯 Software Developer · Fresher</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width:0%"></div>
+                </div>
+                <div class="progress-text" id="progressText">Question 1 of 5</div>
+            </div>
+            <div class="timer-wrap">
+                <div class="timer" id="timer">00:00</div>
+                <div class="timer-label">Elapsed</div>
+            </div>
+        </div>
+        <div class="question-dots" id="questionDots"></div>
+    </div>
+
+    <div class="interview-body">
+        <div class="question-card">
+            <div class="question-meta">
+                <div class="question-number" id="questionNum">QUESTION 1 OF 5</div>
+                <div class="question-type-pill" id="questionTypeDisplay">HR Round</div>
+            </div>
+            <div class="question-text" id="questionText">Loading your question...</div>
+            <div class="question-tip" id="questionTip">💡 <strong>Tip:</strong> Use the STAR method — Situation, Task, Action, Result.</div>
+        </div>
+
+        <div class="answer-box">
+            <div class="answer-label">
+                <label>Your Answer</label>
+                <div class="word-count" id="wordCountDisplay"><span id="wordCount">0</span> / 500 words</div>
+            </div>
+            <textarea class="answer-textarea" id="answerTextarea" placeholder="Type your answer here. Be specific and use examples where possible..." oninput="updateWordCount()"></textarea>
+            <div class="answer-hint" id="answerHint">✏️ Start typing — aim for at least 50 words for a strong answer.</div>
+        </div>
+
+        <div class="interview-buttons">
+            <button class="btn-skip" onclick="skipQuestion()">Skip Question</button>
+            <button class="btn-next" onclick="nextQuestion()" id="nextBtn">Next Question →</button>
+        </div>
+    </div>
+</div>
+
+<!-- ════════════════ SCREEN 3: RESULTS ════════════════ -->
+<div class="screen screen-results">
+    <div class="results-body">
+        <div class="result-header">
+            <h1 class="result-congrats" id="resultCongrats">🎉 Great job!</h1>
+            <div class="result-meta" id="resultMeta">
+                <div class="result-meta-item"><div class="meta-label">Role</div><div class="meta-value" id="resultRole">—</div></div>
+                <div class="result-meta-item"><div class="meta-label">Level</div><div class="meta-value" id="resultLevel">—</div></div>
+                <div class="result-meta-item"><div class="meta-label">Date</div><div class="meta-value" id="resultDate">—</div></div>
+                <div class="result-meta-item"><div class="meta-label">Duration</div><div class="meta-value" id="resultDuration">—</div></div>
+            </div>
+        </div>
+
+        <div class="score-section">
+            <div>
+                <div class="score-circle-container">
+                    <svg class="score-svg" viewBox="0 0 200 200">
+                        <circle class="score-circle-bg" cx="100" cy="100" r="88"></circle>
+                        <circle class="score-circle-fill" id="scoreCircle" cx="100" cy="100" r="88"></circle>
+                    </svg>
+                    <div class="score-text">
+                        <div class="score-number" id="scoreNumber">0</div>
+                        <div class="score-max">/100</div>
+                    </div>
+                </div>
+                <div class="score-label" id="scoreLabel">Analyzing...</div>
+            </div>
+        </div>
+
+        <div class="result-stats">
+            <div class="result-stat-card">
+                <div class="result-stat-number" id="avgScore">—</div>
+                <div class="result-stat-label">Average Score / Question</div>
+            </div>
+            <div class="result-stat-card">
+                <div class="result-stat-number" id="bestQuestion">—</div>
+                <div class="result-stat-label">Best Answer Score</div>
+            </div>
+            <div class="result-stat-card">
+                <div class="result-stat-number" id="worstQuestion">—</div>
+                <div class="result-stat-label">Needs Most Work</div>
+            </div>
+        </div>
+
+        <div class="feedback-section">
+            <h2 class="feedback-title">Overall Feedback</h2>
+            <p class="feedback-text" id="overallFeedback">Loading...</p>
+            <div class="feedback-highlights">
+                <div class="highlight-box">
+                    <div class="highlight-label">✅ Top Strengths</div>
+                    <div class="highlight-text" id="strengthsList">Loading...</div>
+                </div>
+                <div class="highlight-box warning">
+                    <div class="highlight-label">⚠️ Key Improvements</div>
+                    <div class="highlight-text" id="improvementsList">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="breakdown-section">
+            <h2 class="breakdown-title">Detailed Question Breakdown</h2>
+            <div id="breakdownContainer"></div>
+        </div>
+
+        <div class="result-buttons">
+            <button class="btn-download" onclick="downloadReport()">📥 Download Full Report</button>
+            <button class="btn-again" onclick="resetAndGoHome()">🔄 New Interview</button>
+        </div>
+    </div>
+</div>
+
+<!-- LOADING OVERLAY -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-card">
+        <div class="loading-spinner"></div>
+        <h2 class="loading-title" id="loadingTitle">Generating Questions</h2>
+        <p class="loading-text" id="loadingText">Crafting personalized questions for your session...</p>
+        <div class="rotating-quote" id="rotatingQuote">"The secret of getting ahead is getting started." — Mark Twain</div>
+    </div>
+</div>
+
+<!-- CONFETTI -->
+<canvas id="confettiCanvas"></canvas>
+
+<!-- ════════════════ JAVASCRIPT ════════════════ -->
+<script>
+// ═══ STATE ═══
+let userProfile = { fullName:'', email:'', phone:'', college:'', city:'', jobRole:'', experienceLevel:'', interviewType:'', questionCount:5 };
+let session = { questions:[], answers:[], currentQ:0, startTime:null, endTime:null };
+let lastEvaluation = null;
+let timerInterval = null;
+
+const QUOTES = [
+    '"The secret of getting ahead is getting started." — Mark Twain',
+    '"Every expert was once a beginner." — Helen Hayes',
+    '"Success is where preparation and opportunity meet." — Bobby Unser',
+    '"You are more capable than you think." — PrepAI',
+    '"Confidence comes from preparation." — PrepAI',
+    '"The harder you work, the luckier you get." — Gary Player',
+    '"Don\'t watch the clock; do what it does — keep going." — Sam Levenson'
+];
+
+const TIPS = [
+    'Use the STAR method — Situation, Task, Action, Result.',
+    'Be specific. Give real examples where possible.',
+    'Show enthusiasm — interviewers notice energy.',
+    'Quantify your impact when you can (e.g. "improved by 30%").',
+    'Keep answers concise but complete — 2–3 minutes is ideal.',
+];
+
+// ═══ NAVIGATION ═══
+function showScreen(name) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.querySelector('.screen-' + name).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function scrollToSection(id) {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function resetAndGoHome() {
+    stopTimer();
+    session = { questions:[], answers:[], currentQ:0, startTime:null, endTime:null };
+    showScreen('landing');
+}
+
+function scrollToSection(id) {
+    const el = document.getElementById(id);
+    if (el) {
+        setTimeout(() => {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 50);
+    }
+}
+// ═══ API KEY ═══
+// Groq API - Embedded Key
+const groqApiKey = '__GROQ_API_KEY__';
+// ═══ PILL SELECT ═══
+function selectPill(el, count) {
+    document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    userProfile.questionCount = count;
+}
+
+// ═══ WORD COUNT ═══
+function updateWordCount() {
+    const val = document.getElementById('answerTextarea').value.trim();
+    const words = val ? val.split(/\s+/).filter(w => w).length : 0;
+    document.getElementById('wordCount').textContent = words;
+    const wcd = document.getElementById('wordCountDisplay');
+    const hint = document.getElementById('answerHint');
+    if (words >= 50) {
+        wcd.classList.add('good');
+        hint.className = 'answer-hint ready';
+        hint.textContent = '✅ Great length! Your answer looks solid.';
+    } else {
+        wcd.classList.remove('good');
+        hint.className = 'answer-hint';
+        hint.textContent = `✏️ ${Math.max(0, 50 - words)} more words recommended for a strong answer.`;
+    }
+}
+
+// ═══ ERROR ═══
+function showError(msg) {
+    document.getElementById('error-container').innerHTML =
+        `<div class="error-message"><span>⚠️ ${msg}</span><span class="error-close" onclick="this.parentElement.remove()">✕</span></div>`;
+    document.getElementById('setup-section').scrollIntoView({ behavior:'smooth' });
+}
+
+// ═══ START INTERVIEW ═══
+async function startInterview() {
+    // Validation
+    const checks = [
+        [!document.getElementById('fullName').value.trim(), 'Please enter your full name.'],
+        [!document.getElementById('email').value.trim(), 'Please enter your email address.'],
+        [!document.getElementById('jobRole').value, 'Please select a job role.'],
+        [!document.getElementById('experienceLevel').value, 'Please select your experience level.'],
+        [!document.getElementById('interviewType').value, 'Please select the interview type.'],
+    ];
+    
+    for (const [cond, msg] of checks) { if (cond) { showError(msg); return; } }
+
+    // Collect profile
+    userProfile = {
+        fullName: document.getElementById('fullName').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        college: document.getElementById('college').value.trim(),
+        city: document.getElementById('city').value.trim(),
+        jobRole: document.getElementById('jobRole').value,
+        experienceLevel: document.getElementById('experienceLevel').value,
+        interviewType: document.getElementById('interviewType').value,
+        questionCount: userProfile.questionCount
+    };
+
+    const btn = document.getElementById('startBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="loading-spinner" style="width:22px;height:22px;border-width:3px;display:inline-block;margin-right:8px;vertical-align:middle;"></span> Generating Questions...';
+
+    showLoading('Generating Your Questions', `Creating ${userProfile.questionCount} personalized ${userProfile.interviewType} questions for ${userProfile.fullName}...`);
+    await generateQuestions();
+
+    btn.disabled = false;
+    btn.innerHTML = '<span>▶</span> Start My Interview Session';
+}
+
+// ═══ API CALL: GENERATE QUESTIONS ═══
+async function generateQuestions() {
+    const prompt = `Generate exactly ${userProfile.questionCount} interview questions for a ${userProfile.jobRole} position.
+Experience level: ${userProfile.experienceLevel}. Interview type: ${userProfile.interviewType}.
+Make questions realistic, varied, and professional.
+Return ONLY a valid JSON array of strings. No explanation. No markdown. No extra text.
+Example: ["Question 1?", "Question 2?"]`;
+
+    try {
+        const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${groqApiKey}` },
+            body: JSON.stringify({ model: 'llama-3.3-70b-versatile', max_tokens: 2000, messages: [{ role: 'user', content: prompt }] })
+        });
+
+        if (!res.ok) {
+            const err = await res.json();
+            throw new Error(err.error?.message || `API error ${res.status}`);
+        }
+
+        const data = await res.json();
+        let content = data.choices[0].message.content.trim();
+
+        // Parse robustly
+        try { session.questions = JSON.parse(content); }
+        catch {
+            const match = content.match(/\[[\s\S]*\]/);
+            if (match) session.questions = JSON.parse(match[0]);
+            else throw new Error('Could not parse questions. Please try again.');
+        }
+
+        if (!Array.isArray(session.questions) || session.questions.length === 0) throw new Error('No questions returned. Please try again.');
+
+        session.answers = new Array(session.questions.length).fill('');
+        session.currentQ = 0;
+        session.startTime = Date.now();
+
+        hideLoading();
+        showScreen('interview');
+
+        document.getElementById('interviewRoleBadge').textContent = `🎯 ${userProfile.jobRole} · ${userProfile.experienceLevel}`;
+        renderQuestionDots();
+        displayQuestion(0);
+        startTimer();
+
+    } catch (err) {
+        hideLoading();
+        showError(`Failed to generate questions: ${err.message}`);
+    }
+}
+
+// ═══ API CALL: EVALUATE ═══
+async function evaluateAnswers() {
+    const qaList = session.questions.map((q, i) => {
+        const ans = session.answers[i]?.trim() || '[SKIPPED — no answer provided]';
+        return `Q${i+1}: ${q}\nAnswer: ${ans}`;
+    }).join('\n\n');
+
+    const prompt = `You are a senior interview coach at a top firm. Evaluate these answers for a ${userProfile.jobRole} (${userProfile.experienceLevel}, ${userProfile.interviewType}).
+Candidate: ${userProfile.fullName}.
+Skipped questions should score 0-2 out of 10. Factor in skips heavily in overall_score.
+
+${qaList}
+
+Return ONLY valid JSON. No markdown. Exact format:
+{
+  "overall_score": 75,
+  "overall_feedback": "2-3 sentence personalized feedback addressing ${userProfile.fullName} directly.",
+  "top_strengths": ["Strength 1", "Strength 2", "Strength 3"],
+  "top_improvements": ["Improvement 1", "Improvement 2", "Improvement 3"],
+  "questions": [
+    {
+      "question": "...",
+      "user_answer": "...",
+      "score": 8,
+      "good_points": "What was done well.",
+      "improvements": "What could be better.",
+      "ideal_answer_hint": "Brief hint on best approach.",
+      "perfect_answer": "A full 2-3 paragraph model answer showing the ideal response."
+    }
+  ]
+}`;
+
+    try {
+        showLoading('Analyzing Your Answers', `Our AI coach is carefully evaluating all ${session.questions.length} of your responses...`);
+
+        const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${groqApiKey}` },
+            body: JSON.stringify({ model: 'llama-3.3-70b-versatile', max_tokens: 6000, messages: [{ role: 'user', content: prompt }] })
+        });
+
+        if (!res.ok) {
+            const err = await res.json();
+            throw new Error(err.error?.message || `API error ${res.status}`);
+        }
+
+        const data = await res.json();
+        let content = data.choices[0].message.content.trim();
+
+        let evaluation;
+        try { evaluation = JSON.parse(content); }
+        catch {
+            const match = content.match(/\{[\s\S]*\}/);
+            if (match) evaluation = JSON.parse(match[0]);
+            else throw new Error('Could not parse evaluation. Please try again.');
+        }
+
+        session.endTime = Date.now();
+        lastEvaluation = evaluation;
+        hideLoading();
+        displayResults(evaluation);
+
+    } catch (err) {
+        hideLoading();
+        showError(`Evaluation failed: ${err.message}`);
+    }
+}
+
+// ═══ DISPLAY QUESTION ═══
+function displayQuestion(index) {
+    session.currentQ = index;
+    const q = session.questions[index];
+    const total = session.questions.length;
+
+    document.getElementById('questionText').textContent = q;
+    document.getElementById('questionNum').textContent = `QUESTION ${index + 1} OF ${total}`;
+    document.getElementById('questionTypeDisplay').textContent = userProfile.interviewType;
+    document.getElementById('progressFill').style.width = ((index + 1) / total * 100) + '%';
+    document.getElementById('progressText').textContent = `Question ${index + 1} of ${total}`;
+    document.getElementById('answerTextarea').value = session.answers[index] || '';
+    document.getElementById('questionTip').innerHTML = `💡 <strong>Tip:</strong> ${TIPS[index % TIPS.length]}`;
+
+    const isLast = index === total - 1;
+    document.getElementById('nextBtn').textContent = isLast ? 'Submit & Get Feedback ✓' : 'Next Question →';
+
+    updateWordCount();
+    renderQuestionDots();
+    document.getElementById('answerTextarea').focus();
+}
+
+function renderQuestionDots() {
+    const el = document.getElementById('questionDots');
+    el.innerHTML = '';
+    session.questions.forEach((_, i) => {
+        const dot = document.createElement('div');
+        dot.className = 'dot' + (i < session.currentQ ? ' completed' : i === session.currentQ ? ' current' : '');
+        dot.title = `Question ${i + 1}`;
+        dot.onclick = () => {
+            session.answers[session.currentQ] = document.getElementById('answerTextarea').value;
+            displayQuestion(i);
+        };
+        el.appendChild(dot);
+    });
+}
+
+function saveCurrentAnswer() {
+    session.answers[session.currentQ] = document.getElementById('answerTextarea').value;
+}
+
+function skipQuestion() {
+    saveCurrentAnswer();
+    if (session.currentQ < session.questions.length - 1) displayQuestion(session.currentQ + 1);
+    else { session.endTime = Date.now(); stopTimer(); evaluateAnswers(); }
+}
+
+function nextQuestion() {
+    saveCurrentAnswer();
+    if (session.currentQ < session.questions.length - 1) displayQuestion(session.currentQ + 1);
+    else { session.endTime = Date.now(); stopTimer(); evaluateAnswers(); }
+}
+
+// ═══ TIMER ═══
+function startTimer() {
+    if (timerInterval) clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        const s = Math.floor((Date.now() - session.startTime) / 1000);
+        const m = Math.floor(s / 60);
+        const el = document.getElementById('timer');
+        el.textContent = String(m).padStart(2,'0') + ':' + String(s % 60).padStart(2,'0');
+        el.className = 'timer' + (s > 240 ? ' danger' : s > 120 ? ' warning' : '');
+    }, 1000);
+}
+function stopTimer() { clearInterval(timerInterval); timerInterval = null; }
+
+// ═══ DISPLAY RESULTS ═══
+function displayResults(ev) {
+    showScreen('results');
+    stopTimer();
+
+    document.getElementById('resultCongrats').textContent = `🎉 Great job, ${userProfile.fullName}!`;
+    document.getElementById('resultRole').textContent = userProfile.jobRole;
+    document.getElementById('resultLevel').textContent = userProfile.experienceLevel;
+    document.getElementById('resultDate').textContent = new Date().toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+
+    const dur = Math.floor(((session.endTime || Date.now()) - session.startTime) / 1000);
+    document.getElementById('resultDuration').textContent = Math.floor(dur/60) + 'm ' + (dur%60) + 's';
+
+    // Score circle — FIX: correct dashoffset calc
+    const score = Math.round(ev.overall_score);
+    const circumference = 2 * Math.PI * 88; // ≈ 553
+    const offset = circumference - (score / 100) * circumference;
+    const circle = document.getElementById('scoreCircle');
+    circle.style.strokeDasharray = circumference;
+    circle.style.strokeDashoffset = circumference; // start at 0%
+    circle.className = 'score-circle-fill ' + (score >= 70 ? 'success' : score >= 50 ? 'warning' : 'danger');
+
+    // Animate after paint
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+        circle.style.strokeDashoffset = offset;
+    }));
+
+    // Animate score number
+    animateCount(0, score, 1500, val => document.getElementById('scoreNumber').textContent = val);
+
+    // Score label
+    const label = score >= 70 ? '🌟 Excellent Performance!' : score >= 50 ? '👍 Good Effort — Keep Practicing' : '💪 Keep Going — Practice Makes Perfect';
+    document.getElementById('scoreLabel').textContent = label;
+
+    // Stats
+    const scores = ev.questions.map(q => q.score);
+    const avg = (scores.reduce((a,b) => a+b, 0) / scores.length).toFixed(1);
+    document.getElementById('avgScore').textContent = avg + '/10';
+    document.getElementById('bestQuestion').textContent = Math.max(...scores) + '/10';
+    document.getElementById('worstQuestion').textContent = Math.min(...scores) + '/10';
+
+    // Feedback
+    document.getElementById('overallFeedback').textContent = ev.overall_feedback;
+    document.getElementById('strengthsList').innerHTML = ev.top_strengths.map(s => `• ${s}`).join('<br>');
+    document.getElementById('improvementsList').innerHTML = ev.top_improvements.map(s => `• ${s}`).join('<br>');
+
+    // Breakdown
+    const container = document.getElementById('breakdownContainer');
+    container.innerHTML = '';
+    ev.questions.forEach((q, i) => {
+        const scoreColor = q.score >= 7 ? 'var(--success)' : q.score >= 5 ? 'var(--warning)' : 'var(--danger)';
+        const badgeBg = q.score >= 7 ? 'rgba(16,185,129,0.1)' : q.score >= 5 ? 'rgba(245,158,11,0.1)' : 'rgba(239,68,68,0.1)';
+        const item = document.createElement('div');
+        item.className = 'breakdown-item';
+        item.innerHTML = `
+            <div class="breakdown-header" onclick="this.parentElement.classList.toggle('expanded')">
+                <div class="breakdown-left">
+                    <div class="breakdown-dot" style="background:${scoreColor}"></div>
+                    <div class="breakdown-question">
+                        <div class="breakdown-question-text">Q${i+1}: ${q.question.length > 70 ? q.question.substring(0,70)+'…' : q.question}</div>
+                        <span class="breakdown-score-badge" style="background:${badgeBg};color:${scoreColor};">${q.score}/10</span>
+                    </div>
+                </div>
+                <div class="breakdown-chevron">▼</div>
+            </div>
+            <div class="breakdown-content">
+                <div class="breakdown-answer">
+                    <div class="breakdown-answer-label">Your Answer</div>
+                    <div class="breakdown-answer-text">${q.user_answer || '<em style="color:var(--muted)">No answer provided (skipped)</em>'}</div>
+                </div>
+                <div class="breakdown-feedback">
+                    <div class="feedback-item"><div class="feedback-item-icon">✅</div><div class="feedback-item-text"><strong>Strengths:</strong> ${q.good_points}</div></div>
+                    <div class="feedback-item"><div class="feedback-item-icon">⚠️</div><div class="feedback-item-text"><strong>To Improve:</strong> ${q.improvements}</div></div>
+                    <div class="feedback-item"><div class="feedback-item-icon">💡</div><div class="feedback-item-text"><strong>Ideal approach:</strong> ${q.ideal_answer_hint}</div></div>
+                </div>
+                <div class="perfect-answer-section">
+                    <div class="perfect-answer-label">⭐ Model Answer</div>
+                    <div class="perfect-answer-text">${q.perfect_answer || q.ideal_answer_hint}</div>
+                </div>
+            </div>`;
+        container.appendChild(item);
+    });
+
+    if (score >= 70) launchConfetti();
+}
+
+function animateCount(from, to, duration, cb) {
+    const start = Date.now();
+    const tick = () => {
+        const p = Math.min((Date.now() - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - p, 3);
+        cb(Math.round(from + (to - from) * ease));
+        if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+}
+
+// ═══ DOWNLOAD REPORT ═══
+function downloadReport() {
+    if (!lastEvaluation) return;
+    const ev = lastEvaluation;
+    const dur = Math.floor(((session.endTime || Date.now()) - session.startTime) / 1000);
+    const durStr = Math.floor(dur/60) + 'm ' + (dur%60) + 's';
+
+    const report = `
+╔══════════════════════════════════════════════════╗
+║           PrepAI — Smart Interview Coach          ║
+║              Official Interview Report            ║
+╚══════════════════════════════════════════════════╝
+
+CANDIDATE
+─────────────────────────────────────────────
+Name:       ${userProfile.fullName}
+Email:      ${userProfile.email}
+Phone:      ${userProfile.phone || 'Not provided'}
+College:    ${userProfile.college || 'Not provided'}
+City:       ${userProfile.city || 'Not provided'}
+
+INTERVIEW DETAILS
+─────────────────────────────────────────────
+Role:       ${userProfile.jobRole}
+Level:      ${userProfile.experienceLevel}
+Type:       ${userProfile.interviewType}
+Date:       ${new Date().toLocaleDateString()}
+Duration:   ${durStr}
+Score:      ${ev.overall_score}/100
+
+OVERALL FEEDBACK
+─────────────────────────────────────────────
+${ev.overall_feedback}
+
+TOP STRENGTHS
+${ev.top_strengths.map((s,i) => `  ${i+1}. ${s}`).join('\n')}
+
+KEY IMPROVEMENTS
+${ev.top_improvements.map((s,i) => `  ${i+1}. ${s}`).join('\n')}
+
+QUESTION BREAKDOWN
+═════════════════════════════════════════════
+${ev.questions.map((q,i) => `
+Q${i+1} [Score: ${q.score}/10]
+Question: ${q.question}
+
+Your Answer:
+${q.user_answer || '(Skipped)'}
+
+Feedback:
+✅ ${q.good_points}
+⚠️  ${q.improvements}
+💡 ${q.ideal_answer_hint}
+
+⭐ Model Answer:
+${q.perfect_answer || q.ideal_answer_hint}
+
+─────────────────────────────────────────────`).join('\n')}
+
+Generated by PrepAI — Smart Interview Coach
+${new Date().toString()}
+`.trim();
+
+    const a = document.createElement('a');
+    a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(report);
+    a.download = `PrepAI_${userProfile.fullName.replace(/\s+/g,'_')}_${userProfile.jobRole.replace(/\s+/g,'_')}_${new Date().toISOString().slice(0,10)}.txt`;
+    a.click();
+}
+
+// ═══ LOADING ═══
+let quoteInterval = null;
+function showLoading(title, text) {
+    document.getElementById('loadingTitle').textContent = title;
+    document.getElementById('loadingText').textContent = text;
+    document.getElementById('loadingOverlay').classList.add('active');
+    let qi = 0;
+    quoteInterval = setInterval(() => {
+        qi = (qi + 1) % QUOTES.length;
+        const el = document.getElementById('rotatingQuote');
+        el.style.opacity = 0;
+        setTimeout(() => { el.textContent = QUOTES[qi]; el.style.opacity = 1; }, 250);
+    }, 2500);
+}
+function hideLoading() {
+    clearInterval(quoteInterval);
+    document.getElementById('loadingOverlay').classList.remove('active');
+}
+
+// ═══ CONFETTI ═══
+function launchConfetti() {
+    const canvas = document.getElementById('confettiCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = innerWidth; canvas.height = innerHeight;
+    canvas.style.display = 'block';
+
+    const colors = ['#c9963a','#f0c96a','#1a6b45','#2d9b62','#ffffff'];
+    const particles = Array.from({length:100}, () => ({
+        x: Math.random() * canvas.width, y: -10,
+        vx: (Math.random()-0.5)*6, vy: Math.random()*4+2,
+        color: colors[Math.floor(Math.random()*colors.length)],
+        size: Math.random()*5+2, life:1, rot: Math.random()*360
+    }));
+
+    const t0 = Date.now();
+    (function draw() {
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        const elapsed = Date.now() - t0;
+        if (elapsed > 4000) { canvas.style.display='none'; return; }
+        particles.forEach(p => {
+            p.y += p.vy; p.x += p.vx; p.vy += 0.08; p.rot += 3;
+            p.life = Math.max(0, 1 - elapsed/4000);
+            ctx.save(); ctx.globalAlpha = p.life;
+            ctx.fillStyle = p.color;
+            ctx.translate(p.x, p.y); ctx.rotate(p.rot * Math.PI/180);
+            ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+            ctx.restore();
+        });
+        requestAnimationFrame(draw);
+    })();
+}
+
+// ═══ INIT ═══
+document.addEventListener('DOMContentLoaded', () => {
+    // Groq API is ready
+});
+</script>
+</body>
+</html>
