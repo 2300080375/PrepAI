@@ -904,7 +904,6 @@ function scrollToSection(id) {
 }
 // ═══ API KEY ═══
 // Groq API - Embedded Key
-const groqApiKey = 'your_new_groq_key_here';
 // ═══ PILL SELECT ═══
 function selectPill(el, count) {
     document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
@@ -983,9 +982,9 @@ Return ONLY a valid JSON array of strings. No explanation. No markdown. No extra
 Example: ["Question 1?", "Question 2?"]`;
 
     try {
-        const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        const res = await fetch('/api/chat', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${groqApiKey}` },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ model: 'llama-3.3-70b-versatile', max_tokens: 2000, messages: [{ role: 'user', content: prompt }] })
         });
 
@@ -1060,9 +1059,9 @@ Return ONLY valid JSON. No markdown. Exact format:
     try {
         showLoading('Analyzing Your Answers', `Our AI coach is carefully evaluating all ${session.questions.length} of your responses...`);
 
-        const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        const res = await fetch('/api/chat', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${groqApiKey}` },
+            headers: { 'Content-Type': 'application/json' },,
             body: JSON.stringify({ model: 'llama-3.3-70b-versatile', max_tokens: 6000, messages: [{ role: 'user', content: prompt }] })
         });
 
