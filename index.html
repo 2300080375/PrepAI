@@ -883,10 +883,6 @@ function showScreen(name) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function scrollToSection(id) {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
 
 function resetAndGoHome() {
     stopTimer();
@@ -1061,7 +1057,7 @@ Return ONLY valid JSON. No markdown. Exact format:
 
         const res = await fetch('/api/chat', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },,
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ model: 'llama-3.3-70b-versatile', max_tokens: 6000, messages: [{ role: 'user', content: prompt }] })
         });
 
